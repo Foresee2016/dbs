@@ -15,19 +15,20 @@ import javax.swing.JFrame;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import org.foresee.dbs.rxtx.SerialTool.NoThatSerialPortException;
-import org.foresee.dbs.rxtx.SerialTool.ReadSerialPortException;
-import org.foresee.dbs.rxtx.SerialTool.SendDataToSerialPortException;
-import org.foresee.dbs.rxtx.SerialTool.SerialPortInputStreamCloseException;
-import org.foresee.dbs.rxtx.SerialTool.SerialPortOutputStreamCloseException;
+//import org.foresee.dbs.rxtx.SerialTool.NoThatSerialPortException;
+//import org.foresee.dbs.rxtx.SerialTool.ReadSerialPortException;
+//import org.foresee.dbs.rxtx.SerialTool.SendDataToSerialPortException;
+//import org.foresee.dbs.rxtx.SerialTool.SerialPortInputStreamCloseException;
+//import org.foresee.dbs.rxtx.SerialTool.SerialPortOutputStreamCloseException;
+//
+//import gnu.io.NoSuchPortException;
+//import gnu.io.PortInUseException;
+//import gnu.io.SerialPort;
+//import gnu.io.SerialPortEvent;
+//import gnu.io.SerialPortEventListener;
+//import gnu.io.UnsupportedCommOperationException;
 
-import gnu.io.NoSuchPortException;
-import gnu.io.PortInUseException;
-import gnu.io.SerialPort;
-import gnu.io.SerialPortEvent;
-import gnu.io.SerialPortEventListener;
-import gnu.io.UnsupportedCommOperationException;
-
+@SuppressWarnings("unused")
 public class MainUi extends JFrame {
 	public static void main(String[] args) {
 		new MainUi();
@@ -37,7 +38,7 @@ public class MainUi extends JFrame {
 	public static final int HEIGHT = 480;
 
 	List<String> commNames = null;
-	SerialPort serialPort = null;
+//	SerialPort serialPort = null;
 	
 	JTextArea receiveTextArea = new JTextArea();
 	JTextField sendTextField = new JTextField();
@@ -48,7 +49,7 @@ public class MainUi extends JFrame {
 	
 	public MainUi() {
 		super();
-		commNames = SerialTool.findPorts();
+//		commNames = SerialTool.findPorts();
 		frame();
 		controller();
 	}
@@ -96,8 +97,8 @@ public class MainUi extends JFrame {
 			@Override
 			public void windowClosed(WindowEvent e) {
 				super.windowClosed(e);
-				SerialTool.closePort(serialPort);
-				System.exit(0);
+//				SerialTool.closePort(serialPort);
+//				System.exit(0);
 			}
 		});
 		view();
@@ -110,76 +111,76 @@ public class MainUi extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				super.mouseClicked(e);
-				String portName=commChoice.getItemAt(commChoice.getSelectedIndex());
-				int baudrate=baudrateChoice.getItemAt(baudrateChoice.getSelectedIndex());
-				try {
-					serialPort=SerialTool.openPort(portName, baudrate);
-					System.out.println("open: "+portName+" baud "+baudrate);
-					SerialTool.addListener(serialPort, new SerialPortListener());
-				} catch (NoSuchPortException e1) {
-					e1.printStackTrace();
-				} catch (PortInUseException e1) {
-					e1.printStackTrace();
-				} catch (UnsupportedCommOperationException e1) {
-					e1.printStackTrace();
-				} catch (NoThatSerialPortException e1) {
-					e1.printStackTrace();
-				} catch (TooManyListenersException e1) {
-					e1.printStackTrace();
-				}
+//				String portName=commChoice.getItemAt(commChoice.getSelectedIndex());
+//				int baudrate=baudrateChoice.getItemAt(baudrateChoice.getSelectedIndex());
+//				try {
+//					serialPort=SerialTool.openPort(portName, baudrate);
+//					System.out.println("open: "+portName+" baud "+baudrate);
+//					SerialTool.addListener(serialPort, new SerialPortListener());
+//				} catch (NoSuchPortException e1) {
+//					e1.printStackTrace();
+//				} catch (PortInUseException e1) {
+//					e1.printStackTrace();
+//				} catch (UnsupportedCommOperationException e1) {
+//					e1.printStackTrace();
+//				} catch (NoThatSerialPortException e1) {
+//					e1.printStackTrace();
+//				} catch (TooManyListenersException e1) {
+//					e1.printStackTrace();
+//				}
 			}
 		});
 		
-		sendBtn.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				super.mouseClicked(e);
-				String text=sendTextField.getText();				
-				byte[] bytes=text.getBytes();
-				System.out.println("send: "+new String(bytes));
-				try {
-					SerialTool.sendToPort(serialPort, bytes);
-				} catch (SendDataToSerialPortException e1) {
-					e1.printStackTrace();
-				} catch (SerialPortOutputStreamCloseException e1) {
-					e1.printStackTrace();
-				}
-				sendTextField.setText("");
-			}
-		});
-	}
-	public class SerialPortListener implements SerialPortEventListener{
+//		sendBtn.addMouseListener(new MouseAdapter() {
+//			@Override
+//			public void mouseClicked(MouseEvent e) {
+//				super.mouseClicked(e);
+//				String text=sendTextField.getText();				
+//				byte[] bytes=text.getBytes();
+//				System.out.println("send: "+new String(bytes));
+//				try {
+//					SerialTool.sendToPort(serialPort, bytes);
+//				} catch (SendDataToSerialPortException e1) {
+//					e1.printStackTrace();
+//				} catch (SerialPortOutputStreamCloseException e1) {
+//					e1.printStackTrace();
+//				}
+//				sendTextField.setText("");
+//			}
+//		});
+//	}
+//	public class SerialPortListener implements SerialPortEventListener{
 		// 注：串口发了一串字节，并不一定只触发一次DATA_AVAILABLE时间，而且不一定哪几个字符触发一次
 		// 可能的解决方案是设计一个终止符，接收到什么为止。
-		@Override
-		public void serialEvent(SerialPortEvent serialPortEvent) {
-			switch (serialPortEvent.getEventType()) {
-			case SerialPortEvent.BI:	// 10-通讯中断
-				receiveTextArea.setText(receiveTextArea.getText()+"\n"+"通讯中断！");
-				break;
-			case SerialPortEvent.DATA_AVAILABLE:
-				if(serialPort==null){
-					receiveTextArea.setText(receiveTextArea.getText()+"\n"+"有数据但串口为null");
-				}else{
-					String str="";
-					try {
-						byte[] data=SerialTool.readFromPort(serialPort);
-						if(data==null || data.length<1){
-							break;
-						}
-						str=new String(data);
-					} catch (ReadSerialPortException e) {
-						e.printStackTrace();
-					} catch (SerialPortInputStreamCloseException e) {
-						e.printStackTrace();
-					}
-					receiveTextArea.setText(receiveTextArea.getText()+str);
-				}				
-				break;
-			default:
-				break;
-			}
-		}
+//		@Override
+//		public void serialEvent(SerialPortEvent serialPortEvent) {
+//			switch (serialPortEvent.getEventType()) {
+//			case SerialPortEvent.BI:	// 10-通讯中断
+//				receiveTextArea.setText(receiveTextArea.getText()+"\n"+"通讯中断！");
+//				break;
+//			case SerialPortEvent.DATA_AVAILABLE:
+//				if(serialPort==null){
+//					receiveTextArea.setText(receiveTextArea.getText()+"\n"+"有数据但串口为null");
+//				}else{
+//					String str="";
+//					try {
+//						byte[] data=SerialTool.readFromPort(serialPort);
+//						if(data==null || data.length<1){
+//							break;
+//						}
+//						str=new String(data);
+//					} catch (ReadSerialPortException e) {
+//						e.printStackTrace();
+//					} catch (SerialPortInputStreamCloseException e) {
+//						e.printStackTrace();
+//					}
+//					receiveTextArea.setText(receiveTextArea.getText()+str);
+//				}				
+//				break;
+//			default:
+//				break;
+//			}
+//		}
 		
 	}
 }
