@@ -18,9 +18,9 @@ public class DaemonThread extends Thread {
 				Thread.sleep(800);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
+				System.out.println("DaemonThread interrupted.");
 			}
 		}
 		System.out.println("DaemonThread terminated.");	//这句不会打印出来，因为只有后台线程时解释器退出了
 	}
-	
 }
